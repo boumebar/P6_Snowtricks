@@ -11492,7 +11492,7 @@ header.masthead {
   margin-bottom: 3rem;
   padding-top: calc(8rem + 57px);
   padding-bottom: 8rem;
-  background: no-repeat center center;
+  background: no-repeat center;
   background-color: #6c757d;
   background-size: cover;
   background-attachment: scroll;
@@ -11718,7 +11718,7 @@ header.masthead .post-heading .meta a {
 a {
   text-decoration: none !important;
 }
-#adminTitle {
+#block {
   padding-top: 150px;
   text-align: center;
   margin-bottom: 50px;
