@@ -11491,11 +11491,12 @@ header.masthead {
   position: relative;
   margin-bottom: 3rem;
   padding-top: calc(8rem + 57px);
-  padding-bottom: 8rem;
-  background: no-repeat center;
+  padding-bottom: 8em;
+  background: no-repeat center top;
   background-color: #6c757d;
-  background-size: cover;
+  background-size: 100% auto;
   background-attachment: scroll;
+  min-height: 100vh;
 }
 header.masthead:before {
   content: "";
@@ -11731,6 +11732,12 @@ a {
 .notfound p {
   font-size: 1.3rem;
   color: #b2b2be;
+}
+
+#main-content {
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
 }
 
 @media (max-width: 992px) {
