@@ -6,7 +6,9 @@
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 		<meta name="description" content=""/>
-		<meta name="author" content=""/> {% block head %}{% endblock %}
+		<title>
+			{% block title %}{% endblock %}
+		</title>
 		<link
 		rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
 		<!-- Font Awesome icons (free version)-->
@@ -19,74 +21,47 @@
 	</head>
 
 	<body>
-		<!-- Navigation-->
-		<nav class="navbar navbar-expand-lg " id="mainNav">
-			<div class="container px-4 px-lg-5">
-				<a class="navbar-brand" href="{{ path("home")}}">Snowtricks</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-					Menu
-					<i class="fas fa-bars"></i>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarResponsive">
-					<ul class="navbar-nav ms-auto py-4 py-lg-0">
-						<li class="nav-item">
-							<a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path("home")}}">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link px-lg-3 py-3 py-lg-4" href="#">Tricks</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link px-lg-3 py-3 py-lg-4" href="#">Sign in
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link px-lg-3 py-3 py-lg-4" href="#">Sign up
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
+		{% include "shared/_navbar.html.twig" with {'title' : block('title' )} %}
 
+		{% block header %}{% endblock %}
 
 		<main>
 			<!-- Main Content-->
-			<div>
-				{% block content %}{% endblock %}
-			</div>
+			<div class="container"> {% block body %}{% endblock %}
+				</div>
 
-		</main>
-		<!-- Footer-->
-		<footer class="border-top">
-			<div class="container px-4 px-lg-5">
-				<div class="row gx-4 gx-lg-5 justify-content-center">
-					<div class="col-md-10 col-lg-8 col-xl-7">
-						<ul class="list-inline text-center">
-							<li class="list-inline-item">
-								<a href="https://www.linkedin.com/in/boumediene-barsali/" target="_blank">
-									<span class="fa-stack fa-lg">
-										<i class="fas fa-circle fa-stack-2x"></i>
-										<i class="fab fa-linkedin-in fa-stack-1x fa-inverse"></i>
-									</span>
-								</a>
-							</li>
-							<li class="list-inline-item">
-								<a href="https://github.com/boumebar" target="_blank">
-									<span class="fa-stack fa-lg">
-										<i class="fas fa-circle fa-stack-2x"></i>
-										<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-									</span>
-								</a>
-							</li>
-						</ul>
-						<div class="small text-center text-muted fst-italic">Copyright &copy;Snowtricks 2021</div>
+			</main>
+			<!-- Footer-->
+			<footer class="border-top">
+				<div class="container px-4 px-lg-5">
+					<div class="row gx-4 gx-lg-5 justify-content-center">
+						<div class="col-md-10 col-lg-8 col-xl-7">
+							<ul class="list-inline text-center">
+								<li class="list-inline-item">
+									<a href="https://www.linkedin.com/in/boumediene-barsali/" target="_blank">
+										<span class="fa-stack fa-lg">
+											<i class="fas fa-circle fa-stack-2x"></i>
+											<i class="fab fa-linkedin-in fa-stack-1x fa-inverse"></i>
+										</span>
+									</a>
+								</li>
+								<li class="list-inline-item">
+									<a href="https://github.com/boumebar" target="_blank">
+										<span class="fa-stack fa-lg">
+											<i class="fas fa-circle fa-stack-2x"></i>
+											<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+										</span>
+									</a>
+								</li>
+							</ul>
+							<div class="small text-center text-muted fst-italic">Copyright &copy;Snowtricks 2021</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</footer>
+			</footer>
 
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-		<script src="#"></script>
-	</body>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+			<script src="#"></script>
+		</body>
 
-</html>
+	</html>

@@ -1,11 +1,12 @@
 {% extends "base.html.twig" %}
 
-{% block head  %}
-	<title>Home</title>
+{% set nav = "Home" %}
+
+{% block title  %}Home
 {% endblock %}
 
 
-{% block content %}
+{% block header %}
 	<header class="masthead d-flex align-items-center" style="background-image:url({{ asset('img/home.jpg')}})">
 		<div class=" container position-relative px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 justify-content-center">
@@ -20,7 +21,10 @@
 	<a href="#main" id="main-content">
 		<i class="fas fa-arrow-circle-down fa-3x"></i>
 	</a>
-	<div class="container">
+{% endblock %}
+
+{% block body %}
+	<div>
 		<h2 class="text-center" id="main">Tricks</h2>
 		<div class="album py-5 bg-light">
 			<div class="container">
