@@ -44,9 +44,9 @@
 										<a href="{{ path('trick_show',{ "category_slug" : trick.category.slug ,"slug" : trick.slug }) }}" type="button" class="btn btn-sm btn-outline-primary">View</a>
 									</div>
 									<div>
-										<button type="button" class="btn btn-sm font-primary">
+										<a href="{{ path('trick_edit',{"id" : trick.id })}}" type="button" class="btn btn-sm font-primary">
 											<i class="fas fa-pen "></i>
-										</button>
+										</a>
 										<button type="button" class="btn btn-sm">
 											<i class="fas fa-trash-alt"></i>
 										</button>

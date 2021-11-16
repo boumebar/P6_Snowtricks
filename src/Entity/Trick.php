@@ -21,11 +21,14 @@ class Trick
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le nom est obligatoire")
+     * @Assert\Length(min=3, minMessage="Le nom doit avoir au moins 3 caractères")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="La descritpion est obligatoire")
+     * @Assert\Length(min=20, minMessage="La description doit avoir au moins 20 caractères")
      */
     private $description;
 

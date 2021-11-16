@@ -7,6 +7,7 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -16,12 +17,13 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                "label" => "Nom du produit",
+                "label" => "Nom de la figure",
                 "attr"  => ['placeholder' => 'Veuillez entrer le nom de la figure']
             ])
-            ->add('description')
-            ->add('created_at')
-            ->add('slug')
+            ->add('description', TextareaType::class, [
+                "label" => "Description",
+                "attr"  => ["placeholder" => "Veuillez entrer une description"]
+            ])
             ->add('category', EntityType::class, [
                 "label" => "Catégorie",
                 "placeholder" => "-- Choisir une catégorie --",
