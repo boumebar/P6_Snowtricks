@@ -41,7 +41,7 @@
 								<h3 class="text-center">{{ trick.name|upper}}</h3>
 								<div class="d-flex justify-content-between align-items-center">
 									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-primary">View</button>
+										<a href="{{ path('trick_show',{ "category_slug" : trick.category.slug ,"slug" : trick.slug }) }}" type="button" class="btn btn-sm btn-outline-primary">View</a>
 									</div>
 									<div>
 										<button type="button" class="btn btn-sm font-primary">
