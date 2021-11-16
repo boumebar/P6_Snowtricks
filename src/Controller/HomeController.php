@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,12 +21,12 @@ class HomeController extends AbstractController
     }
 
     /**
-     * 
+     * @Route("/" , name="home")
      * @return Response
      */
     public function index(): Response
     {
         $tricks = $this->repository->findAll();
-        return $this->render("pages/home.html.twig", ["tricks" => $tricks]);
+        return $this->render("home.html.twig", ["tricks" => $tricks]);
     }
 }
