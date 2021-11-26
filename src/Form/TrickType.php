@@ -29,7 +29,7 @@ class TrickType extends AbstractType
                 "placeholder" => "-- Choisir une catégorie --",
                 "class" => Category::class,
                 "choice_label" => function (Category $category) {
-                    return $category->getName();
+                    return strtoupper($category->getName());
                 }
             ]);
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,9 +19,10 @@ class TrickController extends AbstractController
     /**
      * @Route("/{category_slug}/{slug}", name="trick_show")
      */
-    public function show($category_slug, $slug, TrickRepository $trickRepository)
+    public function show($category_slug, $slug, TrickRepository $trickRepository, CommentRepository $commentRepository)
     {
         $trick = $trickRepository->findOneBy(["slug" => $slug]);
+        $comments = $commentRepository->findBy(["trick" => $trick->getId()]);
 
         if (!$trick) {
             throw $this->createNotFoundException("Cette figure n'existe pas");
@@ -30,7 +32,7 @@ class TrickController extends AbstractController
         }
 
 
-        return $this->render("trick/show.html.twig", ['trick' => $trick]);
+        return $this->render("trick/show.html.twig", ['trick' => $trick, "comments" => $comments]);
     }
 
 
