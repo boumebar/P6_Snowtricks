@@ -9,24 +9,61 @@
 
 	<div class="container py-5">
 		<div class="row text-center text-white mb-5">
+			<h1>{{ trick.name}}</h1>
 			<div class="col-lg-10 mx-auto">
 				<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
 				<p class="text-start col-8 mx-auto">{{trick.description|nl2br}}</p>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-lg-10 mx-auto">
-				<img src="" alt="">
-			</div>
-		</div>
 	</div>
 
 
-	<ul>
-		{% for comment in comments %}
-			<li>
-				{{ comment.content}}
-			</li>
-		{% endfor %}
-	</ul>
+	<div class="container">
+		<div class="be-comment-block">
+			<h2 class="comments-title">Commentaires</h2>
+			{% for comment in trick.comments %}
+				<div class="be-comment">
+					<div class="be-comment-content">
+						<span
+							class="be-comment-name">{# {{ comment.getAuthor}} #}
+						</span>
+						<span class="be-comment-time">
+							<i class="far fa-clock"></i>
+							{{ comment.getCreatedAt}}
+						</span>
+
+						<p class="be-comment-text">{{ comment.getContent}}</p>
+					</div>
+				</div>
+			{% endfor %}
+
+			{{ form_start(formView)}}
+			{{ form_errors(formView)}}
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						{{ form_row(formView.content)}}
+					</div>
+				</div>
+				{# <div class="col-xs-12 mb-3">
+									<div class="form-group">
+										<textarea name="content" class="form-input form-control" placeholder="Votre commentaire" required></textarea>
+										<div class="invalid-feedback" data-sb-feedback="content:required">Le commentaire est obligatoire</div>
+									</div>
+				
+								</div>
+								<input type="hidden" name="postId" value=""/>
+								<input type="hidden" name="token" value=""/> #}
+				<button class="btn btn-primary pull-right" type="submit">Envoyer</button>
+			</div>
+			{{ form_end(formView)}}
+
+			<div class="mt-5 text-center">
+				<p class="d-inline">Vous devez être connecté pour laisser un commentaire
+				</p>
+				<a href="" class="d-inline text-primary">Connectez-vous</a>
+			</div>
+
+		</div>
+	</div>
 {% endblock %}

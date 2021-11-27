@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
@@ -20,6 +21,8 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Le message est obligatoire")
+     * @Assert\Length(min=3 , minMessage="Le message doit avoir au minimum 3 caractères")
      */
     private $content;
 
@@ -56,12 +59,12 @@ class Comment
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?string
     {
-        return $this->created_at;
+        return $this->created_at->format('d F Y');
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function setCreatedAt(\DateTime $created_at): self
     {
         $this->created_at = $created_at;
 
