@@ -35,9 +35,7 @@
 							<div class="card shadow-sm">
 								<img src="{{ asset('img/home.jpg')}}"/>
 								<title>{{ trick.name}}</title>
-
-							</svg>
-
+							</div>
 							<div class="card-body">
 								<h3 class="text-center">{{ trick.name|upper}}</h3>
 								<div class="d-flex justify-content-between align-items-center">
@@ -48,16 +46,18 @@
 										<a href="{{ path('trick_edit',{"id" : trick.id })}}" type="button" class="btn btn-sm font-primary">
 											<i class="fas fa-pen "></i>
 										</a>
-										<button type="button" class="btn btn-sm">
+										<a href="{{path('trick_delete',{'id' : trick.id})}}" type="button" class="btn btn-sm" onclick="return confirm('Etes-vous certain de vouloir supprimer cet article ?')">
 											<i class="fas fa-trash-alt"></i>
-										</button>
+										</a>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				{% endfor %}
-
+					{% endfor %}
+				</div>
+				<div class="text-center mt-4">
+					<button type="button" class="btn btn-outline-primary">Load More</button>
+				</div>
 			</div>
 		</div>
 	</div>

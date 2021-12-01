@@ -63,7 +63,7 @@ class TrickController extends AbstractController
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             $em->persist($trick);
             $em->flush();
-
+            $this->addFlash("success", "La figure a bien été ajoutée !");
             return $this->redirectToRoute('trick_show', [
                 'category_slug' => $trick->getCategory()->getSlug(),
                 'slug'          => $trick->getSlug()
@@ -79,7 +79,7 @@ class TrickController extends AbstractController
 
     /**
      * @param [int] $id
-     * @route("/admin/trick/{id}/edit" , name="trick_edit")
+     * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit")
      */
     public function edit(int $id, Request $request, TrickRepository $trickRepository, EntityManagerInterface $em, SluggerInterface $slugger)
     {
@@ -94,6 +94,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             $em->flush();
+            $this->addFlash("success", "La figure a bien été modifiée !");
             return $this->redirectToRoute('trick_show', [
                 'category_slug' => $trick->getCategory()->getSlug(),
                 'slug'          => $trick->getSlug()
@@ -103,5 +104,26 @@ class TrickController extends AbstractController
         $formView = $form->createView();
 
         return $this->render("trick/edit.html.twig", ['formView' => $formView]);
+    }
+
+
+    /**
+     *  
+     * @param [type] $id
+     * @return void
+     * @Route("/admin/trick/{id<\d+>}/delete" , name="trick_delete")
+     */
+    public function delete(int $id, TrickRepository $trickRepository, EntityManagerInterface $em)
+    {
+        $trick = $trickRepository->find($id);
+
+        if (!$trick) {
+            throw $this->createNotFoundException("Cette figure n'existe pas !!");
+        }
+        $em->remove($trick);
+        $em->flush();
+
+        $this->addFlash("success", "Figure supprimée avec succès !");
+        return $this->redirectToRoute("home");
     }
 }
