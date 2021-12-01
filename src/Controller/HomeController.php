@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Trick;
 use App\Repository\TrickRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
@@ -16,18 +16,31 @@ class HomeController extends AbstractController
      */
     private $repository;
 
+
     public function __construct(TrickRepository $repository)
     {
         $this->repository = $repository;
     }
 
     /**
-     * 
+     * @Route("/" , name="home")
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $tricks = $this->repository->findAll();
-        return $this->render("pages/home.html.twig", ["tricks" => $tricks]);
+        $limit = 12;
+        $currentPage = (int)$request->get('page', 1);
+
+        $tricks = $this->repository->getPaginatedTricks($currentPage, $limit);
+
+        $total = $this->repository->getTotalTricks();
+
+
+        return $this->render("home.html.twig", [
+            "tricks" => $tricks,
+            "total" => $total,
+            "currentPage" => $currentPage,
+            "limit" => $limit
+        ]);
     }
 }
