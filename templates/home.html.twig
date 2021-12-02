@@ -42,14 +42,16 @@
 									<div class="btn-group">
 										<a href="{{ path('trick_show',{ "category_slug" : trick.category.slug ,"slug" : trick.slug }) }}" type="button" class="btn btn-sm btn-outline-primary">View</a>
 									</div>
-									<div>
-										<a href="{{ path('trick_edit',{"id" : trick.id })}}" type="button" class="btn btn-sm font-primary">
-											<i class="fas fa-pen "></i>
-										</a>
-										<a href="{{path('trick_delete',{'id' : trick.id})}}" type="button" class="btn btn-sm" onclick="return confirm('Etes-vous certain de vouloir supprimer cet article ?')">
-											<i class="fas fa-trash-alt"></i>
-										</a>
-									</div>
+									{% if app.user %}
+										<div>
+											<a href="{{ path('trick_edit',{"id" : trick.id })}}" type="button" class="btn btn-sm font-primary">
+												<i class="fas fa-pen "></i>
+											</a>
+											<a href="{{path('trick_delete',{'id' : trick.id})}}" type="button" class="btn btn-sm" onclick="return confirm('Etes-vous certain de vouloir supprimer cet article ?')">
+												<i class="fas fa-trash-alt"></i>
+											</a>
+										</div>
+									{% endif %}
 								</div>
 							</div>
 						</div>

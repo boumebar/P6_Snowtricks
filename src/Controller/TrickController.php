@@ -64,10 +64,7 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
             $this->addFlash("success", "La figure a bien été ajoutée !");
-            return $this->redirectToRoute('trick_show', [
-                'category_slug' => $trick->getCategory()->getSlug(),
-                'slug'          => $trick->getSlug()
-            ]);
+            return $this->redirectToRoute('home');
         }
 
 
