@@ -22,11 +22,11 @@
 		<div class="be-comment-block">
 			<h2 class="comments-title">Commentaires</h2>
 			{% for comment in trick.comments %}
-				<div class="be-comment">
+				<div class="be-comment mb-3">
 					<div class="be-comment-content">
-						<span
-							class="be-comment-name">{# {{ comment.getAuthor}} #}
+						<span class="be-comment-name"><img src="https://www.gravatar.com/avatar/EMAIL_MD5?d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/{{ comment.getAuthor.username}}/40/{{random(10000)}}/{{random(10000)}}/2/0.5/true" alt="avatar" class="mx-2">{{ comment.getAuthor.username}}
 						</span>
+
 						<span class="be-comment-time">
 							<i class="far fa-clock"></i>
 							{{ comment.getCreatedAt}}
@@ -37,27 +37,25 @@
 				</div>
 			{% endfor %}
 
-			{{ form_start(formView)}}
-			{{ form_errors(formView)}}
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="form-group">
-						{{ form_row(formView.author)}}
+			{% if app.user %}
+				{{ form_start(formView)}}
+				{{ form_errors(formView)}}
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							{{ form_row(formView.content)}}
+						</div>
 					</div>
-					<div class="form-group">
-						{{ form_row(formView.content)}}
-					</div>
+					<button class="btn btn-primary pull-right" type="submit">Envoyer</button>
 				</div>
-				<button class="btn btn-primary pull-right" type="submit">Envoyer</button>
-			</div>
-			{{ form_end(formView)}}
-
-			<div class="mt-5 text-center">
-				<p class="d-inline">Vous devez être connecté pour laisser un commentaire
-				</p>
-				<a href="" class="d-inline text-primary">Connectez-vous</a>
-			</div>
-
+				{{ form_end(formView)}}
+			{% else %}
+				<div class="mt-5 text-center">
+					<p class="d-inline">Vous devez être connecté pour laisser un commentaire
+					</p>
+					<a href="{{path('security_login')}}" class="d-inline text-primary">Connectez-vous</a>
+				</div>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

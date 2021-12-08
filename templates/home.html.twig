@@ -47,9 +47,13 @@
 											<a href="{{ path('trick_edit',{"id" : trick.id })}}" type="button" class="btn btn-sm font-primary">
 												<i class="fas fa-pen "></i>
 											</a>
-											<a href="{{path('trick_delete',{'id' : trick.id})}}" type="button" class="btn btn-sm" onclick="return confirm('Etes-vous certain de vouloir supprimer cet article ?')">
-												<i class="fas fa-trash-alt"></i>
-											</a>
+											<form action="{{ path('trick_delete',{'id':trick.id})}}" method="post" style="display:inline-block">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+												<input type="hidden" name="_method" value="DELETE">
+												<button type="submit">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</form>
 										</div>
 									{% endif %}
 								</div>

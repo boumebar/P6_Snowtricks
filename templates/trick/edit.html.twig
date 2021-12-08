@@ -6,20 +6,8 @@
 {% block body %}
 	<div class="mt-5 ">
 		<h1 class="text-center">Modifier une figure</h1>
-		{{ form_start(formView)}}
-		{{ form_errors(formView)}}
 
-		<div class="row my-5">
-			<div class="col-lg-8 mx-auto">
-				{{ form_widget(formView)}}
-				<div class="text-center">
-					<button type="submit" class="btn btn-outline-primary mt-4">
-						<i class="fas fa-save"></i>
-						Modifier</button>
-				</div>
-				{{ form_end(formView)}}
-			</div>
-		</div>
+		{% include "trick/form/_form.html.twig" with {submitButtonText:"Modifier"}%}
 
 	</div>
 {% endblock %}
