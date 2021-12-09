@@ -1,0 +1,7 @@
+<form class="d-inline" method="post" action="{{ path('trick_delete', {'id': trick.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce trick ?');">
+	<input type="hidden" name="_method" value="DELETE">
+	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+	<button class="btn">
+		<i class="fas fa-trash"></i>
+	</button>
+</form>

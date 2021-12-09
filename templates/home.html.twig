@@ -47,13 +47,9 @@
 											<a href="{{ path('trick_edit',{"id" : trick.id })}}" type="button" class="btn btn-sm font-primary">
 												<i class="fas fa-pen "></i>
 											</a>
-											<form action="{{ path('trick_delete',{'id':trick.id})}}" method="post" style="display:inline-block">
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
-												<input type="hidden" name="_method" value="DELETE">
-												<button type="submit">
-													<i class="fas fa-trash-alt"></i>
-												</button>
-											</form>
+
+											{% include "trick/form/_form_delete.html.twig" %}
+
 										</div>
 									{% endif %}
 								</div>
