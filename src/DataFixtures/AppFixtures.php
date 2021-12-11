@@ -43,13 +43,14 @@ class AppFixtures extends Fixture
             ->setRoles(['ROLE_ADMIN']);
 
         $manager->persist($admin);
-
+        $users = [];
         for ($i = 0; $i < 5; $i++) {
             $user = new User;
             $hash = $this->encoder->hashPassword($user, "password");
             $user->setUsername("user$i")
                 ->setEmail("user$i@gmail.com")
                 ->setPassword($hash);
+            $users[] = $user;
             $manager->persist($user);
         }
 
@@ -87,7 +88,8 @@ class AppFixtures extends Fixture
                 for ($j = 1; $j < rand(1, 6); $j++) {
                     $comment = new Comment;
                     $comment->setContent($faker->paragraphs(1, true))
-                        ->setTrick($trick);
+                        ->setTrick($trick)
+                        ->setAuthor($faker->randomElement($users));
                     $manager->persist($comment);
                 }
             }

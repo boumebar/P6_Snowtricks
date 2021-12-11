@@ -9,21 +9,18 @@
 			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 		{% endif %}
 
-		{% if app.user %}
-			<div class="mb-3">
-				You are logged in as
-				{{ app.user.username }},
-				<a href="{{ path('app_logout') }}">Logout</a>
+		<h1 class="text-center mb-4">Connexion</h1>
+		<div class="container row my-5">
+			<div class="row col-md-8 mx-auto">
+				{{ form_start(formView)}}
+				{{ form_errors(formView)}}
+				{{ form_widget(formView)}}
+				<div class="col-md-6 mx-auto d-grid">
+					<button class="btn btn-block btn-lg btn-primary mt-3" type="submit">
+						connexion
+					</button>
+				</div>
+				{{ form_end(formView)}}
 			</div>
-		{% endif %}
-		<h1>Connexion</h1>
-
-		{{ form_start(formView)}}
-		{{ form_errors(formView)}}
-		{{ form_widget(formView)}}
-		<button class="btn btn-lg btn-primary" type="submit">
-			connexion
-		</button>
-		{{ form_end(formView)}}
-
+		</div>
 	{% endblock %}

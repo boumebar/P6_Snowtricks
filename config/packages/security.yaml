@@ -26,6 +26,7 @@ security:
                 check_path: security_login
                 username_parameter: login[username]
                 password_parameter: login[password]
+                default_target_path: home
             logout:
                 path: security_logout
                 # where to redirect after logout
@@ -40,5 +41,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }

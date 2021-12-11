@@ -18,7 +18,7 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("/{category_slug}/{slug}", name="trick_show")
+     * @Route("/{category_slug<^[a-zA-Z][a-z_A-Z-]+$>}/{slug}", name="trick_show")
      */
     public function show($category_slug, $slug, TrickRepository $trickRepository, Request $request, EntityManagerInterface $em)
     {
@@ -37,6 +37,7 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setTrick($trick);
+            $comment->setAuthor($this->getUser());
             $em->persist($comment);
             $em->flush();
             return $this->redirectToRoute('trick_show', [
@@ -50,7 +51,7 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("/admin/trick/create" , name="trick_create")
+     * @Route("/admin/trick/create" , name="trick_create", methods={"GET","POST"})
      */
     public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger)
     {
@@ -64,10 +65,7 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
             $this->addFlash("success", "La figure a bien été ajoutée !");
-            return $this->redirectToRoute('trick_show', [
-                'category_slug' => $trick->getCategory()->getSlug(),
-                'slug'          => $trick->getSlug()
-            ]);
+            return $this->redirectToRoute('home');
         }
 
 
@@ -78,18 +76,14 @@ class TrickController extends AbstractController
 
 
     /**
-     * @param [int] $id
-     * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit")
+     * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit", methods={"GET", "PUT"})
      */
-    public function edit(int $id, Request $request, TrickRepository $trickRepository, EntityManagerInterface $em, SluggerInterface $slugger)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger)
     {
-        $trick = $trickRepository->find($id);
-        $form = $this->createForm(TrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick, [
+            'method' => 'PUT'
+        ]);
         $form->handleRequest($request);
-
-        if (!$trick) {
-            throw $this->createNotFoundException("Cette figure n'existe pas !!");
-        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
@@ -108,22 +102,17 @@ class TrickController extends AbstractController
 
 
     /**
-     *  
-     * @param [type] $id
-     * @return void
-     * @Route("/admin/trick/{id<\d+>}/delete" , name="trick_delete")
+     * 
+     * @Route("/admin/trick/{id<\d+>}/delete" , name="trick_delete", methods={"DELETE"})
      */
-    public function delete(int $id, TrickRepository $trickRepository, EntityManagerInterface $em)
+    public function delete(Request $request, Trick $trick, EntityManagerInterface $em)
     {
-        $trick = $trickRepository->find($id);
-
-        if (!$trick) {
-            throw $this->createNotFoundException("Cette figure n'existe pas !!");
+        if ($this->isCsrfTokenValid("delete" . $trick->getId(), $request->request->get('_token'))) {
+            $em->remove($trick);
+            $em->flush();
+            $this->addFlash("success", "Figure supprimée avec succès !");
         }
-        $em->remove($trick);
-        $em->flush();
 
-        $this->addFlash("success", "Figure supprimée avec succès !");
         return $this->redirectToRoute("home");
     }
 }
