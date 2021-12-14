@@ -12,6 +12,11 @@
 			<h1>{{ trick.name}}</h1>
 			<div class="col-lg-10 mx-auto">
 				<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
+				<div>
+					{% for picture in trick.pictures %}
+						<img src="{{ asset('uploads/' ~ picture.name )}}" alt="Image">
+					{% endfor %}
+				</div>
 				<p class="text-start col-8 mx-auto">{{trick.description|nl2br}}</p>
 			</div>
 		</div>
