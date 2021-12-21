@@ -5,9 +5,14 @@
 
 {% block body %}
 	<div class="mt-5 ">
-		<h1 class="text-center">Ajouter une figure</h1>
+		<h1 class="text-center">Add Trick</h1>
 
 		{% include "trick/form/_form.html.twig" %}
 
 	</div>
+{% endblock %}
+
+
+{% block javascript %}
+	<script src="{{ asset('js/medias.js')}}"></script>
 {% endblock %}

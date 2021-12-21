@@ -7,6 +7,7 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,25 +19,34 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                "label" => "Nom de la figure",
-                "attr"  => ['placeholder' => 'Veuillez entrer le nom de la figure']
+                "label" => "Name",
+                "attr"  => ['placeholder' => 'Please enter a name']
             ])
             ->add('description', TextareaType::class, [
                 "label" => "Description",
-                "attr"  => ["placeholder" => "Veuillez entrer une description"]
+                "attr"  => ["placeholder" => "Please enter a description"]
             ])
             ->add('category', EntityType::class, [
-                "label" => "Catégorie",
-                "placeholder" => "-- Choisir une catégorie --",
+                "label" => "Catégory",
+                "placeholder" => "-- Choose category --",
                 "class" => Category::class,
                 "choice_label" => function (Category $category) {
                     return strtoupper($category->getName());
                 }
             ])
             ->add('pictures', FileType::class, [
-                "label" => "Photos",
+                "label" => "Pictures",
                 "multiple" => true,
-                "mapped" => false
+                "mapped" => false,
+                'required' => false
+            ])
+            ->add('videos', CollectionType::class, [
+                'label' => "Videos",
+                'entry_type' => VideoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ]);
     }
 

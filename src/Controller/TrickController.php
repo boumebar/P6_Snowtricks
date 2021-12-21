@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Service\VideoService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,10 +30,12 @@ class TrickController extends AbstractController
         $trick = $trickRepository->findOneBy(["slug" => $slug]);
 
         if (!$trick) {
-            throw $this->createNotFoundException("Cette figure n'existe pas");
+            throw $this->createNotFoundException("
+            This trick does not exist");
         }
         if ($category_slug !== $trick->getCategory()->getSlug()) {
-            throw $this->createNotFoundException("Cette catégorie n'existe pas");
+            throw $this->createNotFoundException("
+            This category does not exist");
         }
 
         $comment = new Comment;
@@ -56,7 +60,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/create" , name="trick_create", methods={"GET","POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger)
+    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, VideoService $videoService)
     {
         $trick = new Trick;
 
@@ -64,6 +68,8 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // $videoService->addVideo($form, $trick);
+
 
             // on recupere les images 
             $pictures = $form->get('pictures')->getData();
@@ -88,7 +94,7 @@ class TrickController extends AbstractController
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             $em->persist($trick);
             $em->flush();
-            $this->addFlash("success", "La figure a bien été ajoutée !");
+            $this->addFlash("success", "Trick successfully created!");
             return $this->redirectToRoute('home');
         }
 
@@ -102,7 +108,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit", methods={"GET", "PUT"})
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger, VideoService $videoService)
     {
         $form = $this->createForm(TrickType::class, $trick, [
             'method' => 'PUT'
@@ -110,6 +116,17 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // onrecupere les videos
+            // $videos = $form->get('videos')->getData();
+
+
+            // foreach ($videos as $video) {
+            //     $url = $video->getUrl();
+            //     $file = new Video;
+            //     $encodeUrl = $videoService->encode($url);
+            //     $file->setUrl($encodeUrl);
+            //     $trick->addVideo($file);
+            // }
 
             // on recupere les images 
             $pictures = $form->get('pictures')->getData();
@@ -133,7 +150,7 @@ class TrickController extends AbstractController
             $trick->setUpdatedAt(new DateTime());
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             $em->flush();
-            $this->addFlash("success", "La figure a bien été modifiée !");
+            $this->addFlash("success", "Trick successfully updated !");
             return $this->redirectToRoute('trick_show', [
                 'category_slug' => $trick->getCategory()->getSlug(),
                 'slug'          => $trick->getSlug()
@@ -161,7 +178,7 @@ class TrickController extends AbstractController
 
             $em->remove($trick);
             $em->flush();
-            $this->addFlash("success", "Figure supprimée avec succès !");
+            $this->addFlash("success", "Trick successfully deleted !");
         }
 
         return $this->redirectToRoute("home");
@@ -178,7 +195,6 @@ class TrickController extends AbstractController
 
         // on verifie Token
         if ($this->isCsrfTokenValid('delete' . $picture->getId(), $data['_token'])) {
-            $nom = $picture->getName();
 
             // on supprime du dossier local
             $this->deletePictures($picture);

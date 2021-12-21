@@ -3,22 +3,37 @@
 
 <div class="row my-5">
 	<div class="col-lg-8 mx-auto">
-		{{ form_widget(formView)}}
+		{{ form_row(formView.name)}}
+		{{ form_row(formView.description)}}
+		{{ form_row(formView.category)}}
+		{{ form_row(formView.pictures)}}
 		{% if app.request.attributes.get('_route') == 'trick_edit' %}
 			<div>
 				{% for picture in trick.pictures %}
 					<div>
 						<img src="{{ asset('/uploads/' ~ picture.name)}}" alt="image" width="150">
-						<a href="{{ path('trick_delete_picture', {'id':picture.id})}}" data-delete data-token="{{ csrf_token('delete'~ picture.id)}}">supprimer</a>
+						<a href="{{ path('trick_delete_picture', {'id':picture.id})}}" data-delete data-token="{{ csrf_token('delete'~ picture.id)}}">delete</a>
 					</div>
 				{% endfor %}
 			</div>
 		{% endif %}
+		<div>
+
+			{{ form_row(formView._token) }}
+			{{ form_errors(formView) }}
+			<button type="button" class="btn btn-primary btn-new" data-collection="#videos">New Video</button>
+			<div id="videos" class="row" data-prototype="{{ include("trick/form/_url_delete.html.twig", {form:formView.videos.vars.prototype})|e('html_attr') }}" data-index="{{ formView.videos|length > 0 ? formView.videos|last.vars.name + 1 : 0 }}">
+				{% for video in formView.videos %}
+					{{ include ("trick/form/_url_delete.html.twig", {form:video}) }}
+				{% endfor %}
+			</div>
+			{{ form_errors(formView.videos) }}
+		</div>
 		<div class="text-center">
 			<button type="submit" class="btn btn-outline-primary mt-4">
 				<i class="fas fa-save"></i>
-				{{ submitButtonText ?? "Ajouter" }}</button>
+				{{ submitButtonText ?? "Add" }}</button>
 		</div>
-		{{ form_end(formView)}}
+		{{ form_end(formView,{render_rest: false})}}
 	</div>
 </div>

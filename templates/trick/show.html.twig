@@ -17,6 +17,11 @@
 						<img src="{{ asset('uploads/' ~ picture.name )}}" alt="Image">
 					{% endfor %}
 				</div>
+				<div>
+					{% for video in trick.videos %}
+						<iframe width="100%" height="100%" src="{{ video.url }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					{% endfor %}
+				</div>
 				<p class="text-start col-8 mx-auto">{{trick.description|nl2br}}</p>
 			</div>
 		</div>
