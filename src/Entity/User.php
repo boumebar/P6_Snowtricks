@@ -8,12 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -26,6 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * 
      */
     private $username;
 
@@ -50,6 +54,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -63,9 +72,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     public function setUsername(string $username): self
@@ -80,9 +89,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
-    public function getUserIdentifier(): string
+    public function getUserIdentifier(): ?string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     /**
@@ -177,6 +186,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $comment->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
