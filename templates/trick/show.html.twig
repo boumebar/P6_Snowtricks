@@ -30,7 +30,7 @@
 
 	<div class="container">
 		<div class="be-comment-block">
-			<h2 class="comments-title">Commentaires</h2>
+			<h2 class="comments-title">Comments</h2>
 			{% for comment in trick.comments %}
 				<div class="be-comment mb-3">
 					<div class="be-comment-content">
@@ -56,14 +56,14 @@
 							{{ form_row(formView.content)}}
 						</div>
 					</div>
-					<button class="btn btn-primary pull-right" type="submit">Envoyer</button>
+					<button class="btn btn-primary pull-right" type="submit">Send</button>
 				</div>
 				{{ form_end(formView)}}
 			{% else %}
 				<div class="mt-5 text-center">
-					<p class="d-inline">Vous devez être connecté pour laisser un commentaire
+					<p class="d-inline">You must be logged in to leave a comment
 					</p>
-					<a href="{{path('security_login')}}" class="d-inline text-primary">Connectez-vous</a>
+					<a href="{{path('security_login')}}" class="d-inline text-primary">Log in</a>
 				</div>
 			{% endif %}
 		</div>
