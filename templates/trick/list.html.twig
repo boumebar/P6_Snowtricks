@@ -1,0 +1,13 @@
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+	{% for trick in tricks %}
+		{{ include('trick/_card.html.twig') }}
+	{% endfor %}
+</div>
+
+{% if isLast == false %}
+	<span class="d-none">
+		{{ path('trick_paginated', {'page': currentPage + 1}) }}
+	</span>
+{% else %}
+	<span class="d-none"></span>
+{% endif %}

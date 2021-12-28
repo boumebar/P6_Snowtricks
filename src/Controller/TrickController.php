@@ -2,32 +2,43 @@
 
 namespace App\Controller;
 
+use DateTime;
+use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Entity\Picture;
-use App\Entity\Trick;
-use App\Entity\Video;
-use App\Form\CommentType;
 use App\Form\TrickType;
-use App\Repository\TrickRepository;
+use App\Form\CommentType;
 use App\Service\VideoService;
-use DateTime;
+use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
 {
+
+    /**
+     * @var TrickRepository
+     */
+    private $repository;
+
+
+    public function __construct(TrickRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
 
     /**
      * @Route("/{category_slug<^[a-zA-Z][a-z_A-Z-]+$>}/{slug}", name="trick_show")
      */
-    public function show($category_slug, $slug, TrickRepository $trickRepository, Request $request, EntityManagerInterface $em)
+    public function show($category_slug, $slug, Request $request, EntityManagerInterface $em)
     {
-        $trick = $trickRepository->findOneBy(["slug" => $slug]);
+        $trick = $this->repository->findOneBy(["slug" => $slug]);
 
         if (!$trick) {
             throw $this->createNotFoundException("
@@ -60,7 +71,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/create" , name="trick_create", methods={"GET","POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, VideoService $videoService)
+    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger)
     {
         $trick = new Trick;
 
@@ -68,8 +79,6 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $videoService->addVideo($form, $trick);
-
 
             // on recupere les images 
             $pictures = $form->get('pictures')->getData();
@@ -108,7 +117,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit", methods={"GET", "PUT"})
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger, VideoService $videoService)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger)
     {
         $form = $this->createForm(TrickType::class, $trick, [
             'method' => 'PUT'
@@ -116,17 +125,6 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // onrecupere les videos
-            // $videos = $form->get('videos')->getData();
-
-
-            // foreach ($videos as $video) {
-            //     $url = $video->getUrl();
-            //     $file = new Video;
-            //     $encodeUrl = $videoService->encode($url);
-            //     $file->setUrl($encodeUrl);
-            //     $trick->addVideo($file);
-            // }
 
             // on recupere les images 
             $pictures = $form->get('pictures')->getData();
@@ -162,6 +160,27 @@ class TrickController extends AbstractController
         return $this->render("trick/edit.html.twig", ['formView' => $formView, 'trick' => $trick]);
     }
 
+    /**
+     * @Route("/page/trick/{page<\d+>}" , name="trick_paginated")
+     * @return Response
+     */
+    public function tricksPaginated($page): Response
+    {
+        $limit = 12;
+        $currentPage = $page;
+        $total = $this->repository->getTotalTricks();
+
+        $tricks = $this->repository->getPaginatedTricks($currentPage, $limit);
+        $isLast = $this->repository->isLast($currentPage, ceil($total / $limit));
+
+        return $this->render("trick/list.html.twig", [
+            "tricks" => $tricks,
+            "total" => $total,
+            "currentPage" => $currentPage,
+            "limit" => $limit,
+            "isLast" => $isLast
+        ]);
+    }
 
     /**
      * 
