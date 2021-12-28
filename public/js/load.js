@@ -2,12 +2,11 @@ window.onload = () =>{
 
     loadButton = document.getElementById("load");
     changeHref(loadButton)
-    
 
     loadButton.addEventListener("click", function (event) {
       event.preventDefault();
       const el = this;
-
+   
       axios.get(el.getAttribute('href')).then(function (response) {
         el.parentElement.insertAdjacentHTML('beforebegin', response.data);
         changeHref(el);

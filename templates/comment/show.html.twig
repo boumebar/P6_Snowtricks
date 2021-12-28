@@ -1,0 +1,13 @@
+<div class="be-comment mb-3">
+	<div class="be-comment-content">
+		<span class="be-comment-name"><img src="https://www.gravatar.com/avatar/EMAIL_MD5?d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/{{ comment.getAuthor.username}}/40/{{random(10000)}}/{{random(10000)}}/2/0.5/true" alt="avatar" class="mx-2">{{ comment.getAuthor.username}}
+		</span>
+
+		<span class="be-comment-time">
+			<i class="far fa-clock"></i>
+			{{ comment.getCreatedAt}}
+		</span>
+
+		<p class="be-comment-text">{{ comment.getContent}}</p>
+	</div>
+</div>

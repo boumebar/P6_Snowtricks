@@ -31,21 +31,13 @@
 	<div class="container">
 		<div class="be-comment-block">
 			<h2 class="comments-title">Comments</h2>
-			{% for comment in trick.comments %}
-				<div class="be-comment mb-3">
-					<div class="be-comment-content">
-						<span class="be-comment-name"><img src="https://www.gravatar.com/avatar/EMAIL_MD5?d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/{{ comment.getAuthor.username}}/40/{{random(10000)}}/{{random(10000)}}/2/0.5/true" alt="avatar" class="mx-2">{{ comment.getAuthor.username}}
-						</span>
 
-						<span class="be-comment-time">
-							<i class="far fa-clock"></i>
-							{{ comment.getCreatedAt}}
-						</span>
-
-						<p class="be-comment-text">{{ comment.getContent}}</p>
-					</div>
+			{{ render(path('comment_paginated', {trickId: trick.id, page: 1})) }}
+			{% if (trick.comments|length) > 0 %}
+				<div class="text-center mt-4">
+					<a type="button" class="btn btn-outline-primary" id="load" href="#">Load More</a>
 				</div>
-			{% endfor %}
+			{% endif %}
 
 			{% if app.user %}
 				{{ form_start(formView)}}
@@ -68,4 +60,8 @@
 			{% endif %}
 		</div>
 	</div>
+{% endblock %}
+{% block javascript %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+	<script src="{{ asset('js/load.js')}}"></script>
 {% endblock %}

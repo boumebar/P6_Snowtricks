@@ -8,7 +8,6 @@ use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Form\TrickType;
 use App\Form\CommentType;
-use App\Service\VideoService;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,6 +49,7 @@ class TrickController extends AbstractController
         }
 
         $comment = new Comment;
+        $currentPage = 1;
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -64,7 +64,7 @@ class TrickController extends AbstractController
             ]);
         }
 
-        return $this->render("trick/show.html.twig", ['trick' => $trick, "formView" => $form->createView()]);
+        return $this->render("trick/show.html.twig", ['trick' => $trick, "formView" => $form->createView(), 'currentPage' => $currentPage]);
     }
 
 
@@ -173,7 +173,7 @@ class TrickController extends AbstractController
         $tricks = $this->repository->getPaginatedTricks($currentPage, $limit);
         $isLast = $this->repository->isLast($currentPage, ceil($total / $limit));
 
-        return $this->render("trick/list.html.twig", [
+        return $this->render("trick/cardList.html.twig", [
             "tricks" => $tricks,
             "total" => $total,
             "currentPage" => $currentPage,
