@@ -12,7 +12,7 @@ window.onload = () => {
             deleteMedia(media);
     
     });
-    };
+    }
     document
     .querySelectorAll(".btn-remove")
     .forEach(btn => btn.addEventListener("click", (e) => e.currentTarget.closest(".col-8").remove()));
