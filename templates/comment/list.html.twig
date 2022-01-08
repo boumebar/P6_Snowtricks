@@ -1,0 +1,11 @@
+{% for comment in comments %}
+	{% include "comment/show.html.twig" %}
+{% endfor %}
+
+{% if isLast == false %}
+	<span class="d-none">
+		{{ path('comment_paginated', {'page': currentPage + 1,'trickId' :  comments[0].trick.id}) }}
+	</span>
+{% else %}
+	<span class="d-none"></span>
+{% endif %}

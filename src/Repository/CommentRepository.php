@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Trick;
 use App\Entity\Comment;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,36 @@ class CommentRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
+    }
+
+    public function getPaginatedComments($trick, $page, $limit = 12)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.trick = :trick')
+            ->setParameter('trick', $trick)
+            ->orderBy('c.created_at', 'DESC')
+            ->setFirstResult(($page * $limit) - $limit)
+            ->setMaxResults($limit);
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function getTotalcomments($trick)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c)')
+            ->where('c.trick = :trick')
+            ->setParameter('trick', $trick);
+        return $query->getQuery()->getSingleScalarResult();
+    }
+
+    public function isLast($page, $lastPageNumber)
+    {
+        if ($page >= $lastPageNumber) {
+            return true;
+        }
+
+        return false;
     }
 
 

@@ -20,7 +20,7 @@ class TrickRepository extends ServiceEntityRepository
     }
 
 
-    public function getPaginatedTricks($page, $limit)
+    public function getPaginatedTricks($page, $limit = 12)
     {
 
         $query = $this->createQueryBuilder('t')
@@ -36,6 +36,15 @@ class TrickRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('t')
             ->select('COUNT(t)');
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    public function isLast($page, $lastPageNumber)
+    {
+        if ($page >= $lastPageNumber) {
+            return true;
+        }
+
+        return false;
     }
 
     // /**

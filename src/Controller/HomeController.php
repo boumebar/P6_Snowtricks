@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\TrickRepository;
+use App\Service\PaginationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,9 +18,10 @@ class HomeController extends AbstractController
     private $repository;
 
 
-    public function __construct(TrickRepository $repository)
+    public function __construct(TrickRepository $repository, PaginationService $pagination)
     {
         $this->repository = $repository;
+        $this->pagination = $pagination;
     }
 
     /**
@@ -30,17 +32,17 @@ class HomeController extends AbstractController
     {
         $limit = 12;
         $currentPage = (int)$request->get('page', 1);
-
-        $tricks = $this->repository->getPaginatedTricks($currentPage, $limit);
-
         $total = $this->repository->getTotalTricks();
+
+        $tricks = $this->repository->getPaginatedTricks($currentPage);
+        $isLast = $this->repository->isLast($currentPage, ceil($total / $limit));
+
 
 
         return $this->render("home.html.twig", [
             "tricks" => $tricks,
-            "total" => $total,
             "currentPage" => $currentPage,
-            "limit" => $limit
+            "isLast" => $isLast
         ]);
     }
 }
