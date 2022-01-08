@@ -41,7 +41,7 @@ function deleteMedia(media){
                 (response) => response.json()
             ).then(data => {
                 if(data.success){
-                    media.parentElement.remove()
+                    media.parentElement.remove();
                 }else{
                     alert(data.error);
                 }
