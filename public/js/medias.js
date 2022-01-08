@@ -38,7 +38,7 @@ function deleteMedia(media){
                 body: JSON.stringify({"_token" : media.dataset.token})
             }).then(
                 // on recupere la reponse en JSON
-                response => response.json()
+                (response) => response.json()
             ).then(data => {
                 if(data.success){
                     media.parentElement.remove()
