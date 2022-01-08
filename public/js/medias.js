@@ -19,7 +19,7 @@ window.onload = () => {
   
   document
     .querySelectorAll(".btn-new")
-    .forEach(btn => btn.addEventListener("click", newItem))
+    .forEach(btn => btn.addEventListener("click", newItem));
 }
 
 
