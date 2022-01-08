@@ -39,13 +39,13 @@ function deleteMedia(media){
             }).then(
                 // on recupere la reponse en JSON
                 (response) => response.json()
-            ).then(data => {
+            ).then((data) => {
                 if(data.success){
                     media.parentElement.remove();
                 }else{
                     alert(data.error);
                 }
-            }).catch(e => alert(e));
+            }).catch((e) => alert(e));
         }
 }
 
