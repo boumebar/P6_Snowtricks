@@ -10,17 +10,13 @@
 	<div class="container py-5">
 		<div class="row text-center mb-5">
 			<h1>{{ trick.name}}</h1>
-			<div class="col-lg-10 mx-auto">
+			<div class="col-lg-10 mx-auto row">
 				<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
-				<div>
-					{% for picture in trick.pictures %}
-						<img src="{{ asset('uploads/' ~ picture.name )}}" alt="Image">
-					{% endfor %}
+				<div class="col-lg-7">
+					{% include "medias/picturesCarousel.html.twig" %}
 				</div>
-				<div>
-					{% for video in trick.videos %}
-						<iframe width="100%" height="100%" src="{{ video.url }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-					{% endfor %}
+				<div class="col-lg-5">
+					{% include "medias/videosCarousel.html.twig" %}
 				</div>
 				<p class="text-start col-8 mx-auto">{{trick.description|nl2br}}</p>
 			</div>
@@ -62,6 +58,7 @@
 	</div>
 {% endblock %}
 {% block javascript %}
+	{{ parent() }}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
 	<script src="{{ asset('js/load.js')}}"></script>
 {% endblock %}
