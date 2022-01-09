@@ -8,6 +8,7 @@ use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Form\TrickType;
 use App\Form\CommentType;
+use App\Service\MediaService;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,7 +72,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/create" , name="trick_create", methods={"GET","POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger)
+    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, MediaService $mediaService)
     {
         $trick = new Trick;
 
@@ -80,25 +81,12 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // on recupere les images 
-            $pictures = $form->get('pictures')->getData();
+            // Ajoute la video au bon format
+            $mediaService->addVideos($form, $trick);
 
-            // on boucle sur les images 
-            foreach ($pictures as $picture) {
-                // on renomme les images 
-                $file = md5(uniqid()) . "." . $picture->guessExtension();
+            // Ajoute les photos dans la bdd et le dossier local
+            $mediaService->addPictures($form, $trick);
 
-                // on copie les images dans le dossier uploads
-                $picture->move(
-                    $this->getParameter('pictures_directory'),
-                    $file
-                );
-
-                // on stock le fichier dans la bdd(le nom)
-                $img = new Picture;
-                $img->setName($file);
-                $trick->addPicture($img);
-            }
             $trick->setUpdatedAt(new DateTime());
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             $em->persist($trick);
@@ -117,36 +105,24 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit", methods={"GET", "PUT"})
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger, MediaService $mediaService)
     {
         $form = $this->createForm(TrickType::class, $trick, [
             'method' => 'PUT'
         ]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // on recupere les images 
-            $pictures = $form->get('pictures')->getData();
+            // Ajoute les videos au bon format
+            $mediaService->addVideos($form, $trick);
 
-            // on boucle sur les images 
-            foreach ($pictures as $picture) {
-                // on renomme les images 
-                $file = md5(uniqid()) . "." . $picture->guessExtension();
+            // Ajoute les photos dans la bdd et le dossier local
+            $mediaService->addPictures($form, $trick);
 
-                // on copie les images dans le dossier uploads
-                $picture->move(
-                    $this->getParameter('pictures_directory'),
-                    $file
-                );
 
-                // on stock le fichier dans la bdd(le nom)
-                $img = new Picture;
-                $img->setName($file);
-                $trick->addPicture($img);
-            }
             $trick->setUpdatedAt(new DateTime());
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
+
             $em->flush();
             $this->addFlash("success", "Trick successfully updated !");
             return $this->redirectToRoute('trick_show', [
