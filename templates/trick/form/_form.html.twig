@@ -10,9 +10,9 @@
 		{% if app.request.attributes.get('_route') == 'trick_edit' %}
 			<div>
 				{% for picture in trick.pictures %}
-					<div>
+					<div class="mb-2">
 						<img src="{{ asset('/uploads/' ~ picture.name)}}" alt="image" width="150">
-						<a href="{{ path('trick_delete_picture', {'id':picture.id})}}" data-delete data-token="{{ csrf_token('delete'~ picture.id)}}">delete</a>
+						<a class="btn btn-outline-danger btn-sm" href="{{ path('trick_delete_picture', {'id':picture.id})}}" data-delete data-token="{{ csrf_token('delete'~ picture.id)}}">delete</a>
 					</div>
 				{% endfor %}
 			</div>
@@ -21,7 +21,7 @@
 
 			{{ form_row(formView._token) }}
 			{{ form_errors(formView) }}
-			<button type="button" class="btn btn-primary btn-new" data-collection="#videos">New Video</button>
+			<button type="button" class="btn btn-primary btn-new my-4" data-collection="#videos">New Video</button>
 			<div id="videos" class="row" data-prototype="{{ include("trick/form/_url_delete.html.twig", {form:formView.videos.vars.prototype})|e('html_attr') }}" data-index="{{ formView.videos|length > 0 ? formView.videos|last.vars.name + 1 : 0 }}">
 				{% for video in formView.videos %}
 					{{ include ("trick/form/_url_delete.html.twig", {form:video}) }}
