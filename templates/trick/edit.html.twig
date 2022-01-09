@@ -8,6 +8,10 @@
 		<h1 class="text-center">Update trick</h1>
 
 		{% include "trick/form/_form.html.twig" with {submitButtonText:"Update"}%}
+		<div class="text-center mb-3 text-primary" id="deleteButton">
+			Delete
+			{% include 'trick/form/_card_delete.html.twig' %}
+		</div>
 
 	</div>
 {% endblock %}

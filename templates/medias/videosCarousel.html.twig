@@ -8,7 +8,7 @@
 		{% set count = 0 %}
 		{% for video in trick.videos %}
 			<div class={% if count == 0 %} "carousel-item active" {% else %} "carousel-item" {% endif %}>
-				<iframe width="100%" height="100%" src="{{ video.url }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				<iframe width="100%" height="350" src="{{ video.url }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 			</div>
 			{% set count = count + 1 %}
 		{% endfor %}
