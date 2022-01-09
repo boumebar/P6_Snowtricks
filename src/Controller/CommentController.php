@@ -29,7 +29,7 @@ class CommentController extends AbstractController
      */
     public function commentsPaginated(int $trickId, int $page): Response
     {
-        $limit = 2;
+        $limit = 10;
         $currentPage = $page;
         $total = $this->repository->getTotalComments($trickId);
 

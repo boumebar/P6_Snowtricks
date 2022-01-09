@@ -11,14 +11,66 @@
 		<div class="row text-center mb-5">
 			<h1>{{ trick.name}}</h1>
 			<div class="col-lg-10 mx-auto row">
-				<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
-				<div class="col-lg-7">
-					{% include "medias/picturesCarousel.html.twig" %}
+				<div id="mainPicture">
+					{% if app.user %}
+						<div>
+							<a href="{{ path('trick_edit',{"id" : trick.id })}}" type="button" class="btn btn-sm font-primary">
+								<i class="fas fa-pen "></i>
+							</a>
+
+							{% include "trick/form/_card_delete.html.twig" %}
+
+						</div>
+					{% endif %}
+					{% if trick.mainPicture == null %}
+						<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
+					{% else %}
+						<img class="img-fluid" src="{{ asset('uploads/' ~ trick.mainPicture )}}"/>
+					{% endif %}
 				</div>
-				<div class="col-lg-5">
-					{% include "medias/videosCarousel.html.twig" %}
+				<div class="d-lg-none">
+					<p class="text-center">
+						<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="false" aria-controls="collapse">
+							Voir les médias
+						</button>
+					</p>
+					<div class="collapse mb-4 text-center" id="collapse">
+						{% for picture in trick.pictures %}
+							<div class="col">
+								<img src="{{ asset('uploads/' ~ picture.name ) }}" alt="Image" class="img-thumbnail">
+							</div>
+						{% endfor %}
+						{% for video in trick.videos %}
+							<div class="col">
+								<iframe width="100%" height="300" src="{{ video.url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						{% endfor %}
+					</div>
 				</div>
-				<p class="text-start col-8 mx-auto">{{trick.description|nl2br}}</p>
+				<div class="row pr-0">
+					<div class="col-lg-7  d-none d-lg-block">
+						{% include "medias/picturesCarousel.html.twig" %}
+					</div>
+					<div class="col-lg-5  d-none d-lg-block p-0">
+						{% include "medias/videosCarousel.html.twig" %}
+					</div>
+				</div>
+				<div>
+					<p class="text-start col-8 mx-auto">{{trick.description|nl2br}}</p>
+				</div>
+				<div class="text-start">
+					<p>Category :
+						<span class="badge rounded-pill bg-primary">{{ trick.category.name|upper}}</span>
+					</p>
+					<div class="row">
+						<p class="text-muted col-md-6">
+							Ecrit le :
+							{{ trick.createdAt|date('Y-m-d à h:i')}}
+						</p>
+						<p class="text-muted col-md-6 text-end">
+							{{ (trick.updatedAt != trick.createdAt) ? 'Modifé le : ' ~ trick.updatedAt | date('Y-m-d à h:i')}}</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

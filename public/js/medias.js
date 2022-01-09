@@ -1,27 +1,26 @@
-window.onload = () =>{
+window.onload = () => {
 
     
     var links = document.querySelectorAll("[data-delete]");
     
-    for(link of links){
+    for(let link of links){
         
         
-        link.addEventListener('click', function(e){
-            e.preventDefault()
-            let media = e.currentTarget
-           
-            deleteMedia(media)
+        link.addEventListener("click", function(e){
+            e.preventDefault();
+            let media = e.currentTarget;
+            deleteMedia(media);
     
-    })
+    });
     }
     document
-    .querySelectorAll('.btn-remove')
+    .querySelectorAll(".btn-remove")
     .forEach(btn => btn.addEventListener("click", (e) => e.currentTarget.closest(".col-8").remove()));
   
   document
-    .querySelectorAll('.btn-new')
-    .forEach(btn => btn.addEventListener("click", newItem))
-}
+    .querySelectorAll(".btn-new")
+    .forEach(btn => btn.addEventListener("click", newItem));
+};
 
 
 // delete Pictures
@@ -39,14 +38,14 @@ function deleteMedia(media){
                 body: JSON.stringify({"_token" : media.dataset.token})
             }).then(
                 // on recupere la reponse en JSON
-                response => response.json()
-            ).then(data => {
+                (response) => response.json()
+            ).then((data) => {
                 if(data.success){
-                    media.parentElement.remove()
+                    media.parentElement.remove();
                 }else{
-                    alert(data.error)
+                    alert(data.error);
                 }
-            }).catch(e => alert(e))
+            }).catch((e) => alert(e));
         }
 }
 
