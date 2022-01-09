@@ -22,7 +22,11 @@
 
 						</div>
 					{% endif %}
-					<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
+					{% if trick.mainPicture == null %}
+						<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
+					{% else %}
+						<img class="img-fluid" src="{{ asset('uploads/' ~ trick.mainPicture )}}"/>
+					{% endif %}
 				</div>
 				<div class="d-lg-none">
 					<p class="text-center">

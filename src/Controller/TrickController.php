@@ -9,6 +9,7 @@ use App\Entity\Picture;
 use App\Form\TrickType;
 use App\Form\CommentType;
 use App\Service\MediaService;
+use App\Service\TrickService;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +73,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/create" , name="trick_create", methods={"GET","POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, MediaService $mediaService)
+    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, TrickService $trickService)
     {
         $trick = new Trick;
 
@@ -81,11 +82,7 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Ajoute la video au bon format
-            $mediaService->addVideos($form, $trick);
-
-            // Ajoute les photos dans la bdd et le dossier local
-            $mediaService->addPictures($form, $trick);
+            $trickService->addMedias($form, $trick);
 
             $trick->setUpdatedAt(new DateTime());
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
@@ -105,7 +102,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit", methods={"GET", "PUT"})
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger, MediaService $mediaService)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger, TrickService $trickService)
     {
         $form = $this->createForm(TrickType::class, $trick, [
             'method' => 'PUT'
@@ -113,12 +110,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Ajoute les videos au bon format
-            $mediaService->addVideos($form, $trick);
-
-            // Ajoute les photos dans la bdd et le dossier local
-            $mediaService->addPictures($form, $trick);
-
+            $trickService->addMedias($form, $trick);
 
             $trick->setUpdatedAt(new DateTime());
             $trick->setSlug(strtolower($slugger->slug($trick->getName())));
@@ -168,8 +160,10 @@ class TrickController extends AbstractController
 
             // supprime les photos ddu dossier local
             foreach ($trick->getPictures() as $picture) {
-                $this->deletePictures($picture);
+                $this->deletePictures($picture->getName());
             }
+            if ($trick->getMainPicture())
+                $this->deletePictures($trick->getMainPicture());
 
             $em->remove($trick);
             $em->flush();
@@ -192,7 +186,7 @@ class TrickController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $picture->getId(), $data['_token'])) {
 
             // on supprime du dossier local
-            $this->deletePictures($picture);
+            $this->deletePictures($picture->getName());
 
             // on supprime de la BDD
             $em->remove($picture);
@@ -205,9 +199,9 @@ class TrickController extends AbstractController
         }
     }
 
-    private function deletePictures(Picture $picture)
+    private function deletePictures($picture)
     {
         // on supprime du dossier local
-        unlink($this->getParameter('pictures_directory') . '/' . $picture->getName());
+        unlink($this->getParameter('pictures_directory') . '/' . $picture);
     }
 }

@@ -53,8 +53,43 @@ class MediaService
         }
     }
 
+    public function addMainPicture($form, Trick $trick)
+    {
+
+        // on recupere l'image
+        $mainPicture = $form->get('mainPicture')->getData();
+
+        if ($mainPicture) {
+
+            if ($trick->getMainPicture()) {
+                // on supprime l'ancienne image du dossier uploads 
+                unlink($this->container->getParameter('pictures_directory') . '/' . $trick->getMainPicture());
+            }
+
+            // on renomme l'image
+            $file = md5(uniqid()) . "." . $mainPicture->guessExtension();
+
+            // on copie l'image dans le dossier uploads
+            $mainPicture->move(
+                $this->container->getParameter('pictures_directory'),
+                $file
+            );
+            // on stock le fichier dans la bdd(le nom)
+            $trick->setMainPicture($file);
+        }
+    }
+
+
+
     public function encode(string $url): string
     {
-        return str_replace("watch?v=", "embed/", $url);
+        $dailymotion = "https://www.dailymotion.com/embed/video/";
+        if (str_contains($url, "watch?v=")) {
+            $newUrl = str_replace("watch?v=", "embed/", $url);
+        } elseif (strpos($url, 'video') == 28) {
+            $newUrl = $dailymotion . substr($url, 34);
+        }
+
+        return $newUrl ?? $url;
     }
 }

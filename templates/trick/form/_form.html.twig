@@ -5,6 +5,7 @@
 	<div class="col-lg-8 mx-auto">
 		{{ form_row(formView.name)}}
 		{{ form_row(formView.description)}}
+		{{ form_row(formView.mainPicture)}}
 		{{ form_row(formView.category)}}
 		{{ form_row(formView.pictures)}}
 		{% if app.request.attributes.get('_route') == 'trick_edit' %}

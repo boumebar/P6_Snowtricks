@@ -26,6 +26,11 @@ class TrickType extends AbstractType
                 "label" => "Description",
                 "attr"  => ["placeholder" => "Please enter a description"]
             ])
+            ->add('mainPicture', FileType::class, [
+                'required' => false,
+                'multiple' => false,
+                'mapped' => false
+            ])
             ->add('category', EntityType::class, [
                 "label" => "Catégory",
                 "placeholder" => "-- Choose category --",
