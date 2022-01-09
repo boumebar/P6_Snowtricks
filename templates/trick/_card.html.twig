@@ -1,9 +1,9 @@
 <div class="col">
 	<div class="card shadow-sm">
 		{% if trick.mainPicture == null %}
-			<img src="{{ asset('img/home.jpg')}}"/>
+			<img class="img-fluid" src="{{asset('img/home.jpg')}}" alt="">
 		{% else %}
-			<img src="{{ asset('uploads/' ~ trick.mainPicture )}}"/>
+			<img class="img-fluid" src="{{ asset('uploads/' ~ trick.mainPicture )}}"/>
 		{% endif %}
 		<title>{{ trick.name}}</title>
 	</div>

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur
+{% endblock %}
+
+{% block body %}
+	<div class="container col-md-10">
+		<h1 class="text-center my-5">Hello
+			{{ user.username }}</h1>
+		<div class="row mb-3">
+			<img class="rounded-circle col-2 mx-auto" src="{{asset('uploads/persons/' ~ user.picture)}}" alt="">
+		</div>
+		<div class="row">
+			<a href="{{ path('user_edit',{"id" : user.id })}}" type="submit" class="btn btn-primary my-4 mx-auto col-3">Update my photo</a>
+		</div>
+		<table class="table mb-5">
+			<tbody>
+				<tr>
+					<th>Id</th>
+					<td>{{ user.id }}</td>
+				</tr>
+				<tr>
+					<th>Username</th>
+					<td>{{ user.username }}</td>
+				</tr>
+				<tr>
+					<th>Email</th>
+					<td>{{ user.email }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

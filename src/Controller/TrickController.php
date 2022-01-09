@@ -8,7 +8,6 @@ use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Form\TrickType;
 use App\Form\CommentType;
-use App\Service\MediaService;
 use App\Service\TrickService;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,7 +34,7 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("/{category_slug<^[a-zA-Z][a-z_A-Z-]+$>}/{slug}", name="trick_show")
+     * @Route("/{category_slug<^[a-zA-Z][a-z_A-Z-]+$>}/{slug}", name="trick_show", priority=-1)
      */
     public function show($category_slug, $slug, Request $request, EntityManagerInterface $em)
     {
