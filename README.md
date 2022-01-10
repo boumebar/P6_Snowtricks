@@ -33,3 +33,6 @@ Install fixtures
 ```
     php bin/console doctrine:fixtures:load
 ```
+
+
+#Congratulations the project is installed correctly, you can now start using
