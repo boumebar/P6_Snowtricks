@@ -81,10 +81,8 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $trickService->addMedias($form, $trick);
+            $trickService->valide($form, $trick);
 
-            $trick->setUpdatedAt(new DateTime());
-            $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             $em->persist($trick);
             $em->flush();
             $this->addFlash("success", "Trick successfully created!");
@@ -109,10 +107,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $trickService->addMedias($form, $trick);
-
-            $trick->setUpdatedAt(new DateTime());
-            $trick->setSlug(strtolower($slugger->slug($trick->getName())));
+            $trickService->valide($form, $trick);
 
             $em->flush();
             $this->addFlash("success", "Trick successfully updated !");
