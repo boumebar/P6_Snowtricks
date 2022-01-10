@@ -35,4 +35,4 @@ Install fixtures
 ```
 
 
-# Congratulations the project is installed correctly, you can now start using
+## Congratulations the project is installed correctly, you can now start using
