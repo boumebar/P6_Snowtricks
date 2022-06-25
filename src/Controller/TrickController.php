@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use DateTime;
+
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Entity\Picture;
@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
@@ -72,7 +71,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/create" , name="trick_create", methods={"GET","POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, TrickService $trickService)
+    public function create(Request $request, EntityManagerInterface $em, TrickService $trickService)
     {
         $trick = new Trick;
 
@@ -81,10 +80,8 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $trickService->addMedias($form, $trick);
+            $trickService->valide($form, $trick);
 
-            $trick->setUpdatedAt(new DateTime());
-            $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             $em->persist($trick);
             $em->flush();
             $this->addFlash("success", "Trick successfully created!");
@@ -101,7 +98,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/admin/trick/{id<\d+>}/edit" , name="trick_edit", methods={"GET", "PUT"})
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, SluggerInterface $slugger, TrickService $trickService)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $em, TrickService $trickService)
     {
         $form = $this->createForm(TrickType::class, $trick, [
             'method' => 'PUT'
@@ -109,10 +106,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $trickService->addMedias($form, $trick);
-
-            $trick->setUpdatedAt(new DateTime());
-            $trick->setSlug(strtolower($slugger->slug($trick->getName())));
+            $trickService->valide($form, $trick);
 
             $em->flush();
             $this->addFlash("success", "Trick successfully updated !");
