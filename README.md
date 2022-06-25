@@ -35,4 +35,8 @@ Install fixtures
 ```
 
 
+<<<<<<< HEAD
 ## Congratulations the project is installed correctly, you can now start using :)
+=======
+## Congratulations the project is installed correctly, you can now start using :)
+>>>>>>> 44db914472542d2b4956c2078885e3be81307b73
